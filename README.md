@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TOOLPLANE
+
+## Overview
+
+TOOLPLANE is a developer-first platform offering a collection of fast, minimal, and production-grade tools for extracting, converting, and generating web data. It is designed as a versatile Swiss Army knife for modern web workflows, built using Next.js, React, and ShadCN UI.
+
+## Features
+
+* Scrapers for Amazon, Reddit, YouTube, Bing, Alibaba, and more
+* Converters including article cleaners and markdown extractors
+* Generators like QR codes and password creators
+* Free API access for many tools
+* Recent tool tracking and local persistence
+* Mobile-first responsive design
+* Zero analytics, zero ads, 100 percent privacy-first
+
+## Tech Stack
+
+* Framework: Next.js with App Router
+* UI: TailwindCSS, ShadCN UI
+* Icons: Lucide
+* State: useState, useEffect, localStorage
+* Fonts: Offside
+
+## File Structure Highlights
+
+* `components/ui`: Reusable UI primitives
+* `lib/utils.ts`: Utility and style helpers
+* `lib/fonts.ts`: Custom font imports
+* `components/buy-me-a-coffee-button.tsx`: Support component
+
+## Tool Metadata Structure
+
+Each tool entry follows this interface:
+
+```ts
+interface Tool {
+  title: string;
+  description: string;
+  href: string;
+  icon: React.ReactNode;
+  category: string;
+  tags?: string[];
+  isNew?: boolean;
+  hasFreeApi?: boolean;
+}
+```
+
+## Categories
+
+* Scrapers
+* Converters
+* Generators
+
+## API Documentation
+
+API docs are accessible via the "View API Docs" button on the landing page or directly from `/#api`.
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Navigate to `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Supports Vercel out-of-the-box. Simply connect your GitHub repository and deploy.
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
+MIT License. See `LICENSE` file for details.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built and maintained by [Sarvagya Kumar](https://thesarvagyakumar.site).
