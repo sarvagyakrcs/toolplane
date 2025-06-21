@@ -10,7 +10,6 @@ import {
   QrCode,
   Settings,
   Zap,
-  Twitter,
   Youtube,
   Building2,
   Images
@@ -37,13 +36,6 @@ const tools = [
     description: "Get upvotes, comments, and metadata from Reddit posts with optional comment extraction.",
     href: "/reddit-scraper",
     icon: <MessageSquare className="h-8 w-8 text-primary" />,
-    category: "Scrapers"
-  },
-  {
-    title: "Twitter Post Scraper",
-    description: "Extract tweet content, author info, and media from Twitter/X posts.",
-    href: "/twitter-scraper",
-    icon: <Twitter className="h-8 w-8 text-primary" />,
     category: "Scrapers"
   },
   {
