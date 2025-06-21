@@ -233,7 +233,7 @@ export function ApiCard({
           </p>
           <div className="flex justify-center gap-2">
             <Button variant="outline" size="sm" asChild>
-              <a href="https://github.com/thesarvagyakumar/ghostbox" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/sarvagyakrcs" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-3 w-3 mr-1" />
                 View on GitHub
               </a>

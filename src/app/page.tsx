@@ -195,7 +195,8 @@ export default function Home() {
           <div className="hidden md:flex items-center space-x-6">
             <Link href="#tools" className="text-sm hover:text-primary transition-colors">Tools</Link>
             <Link href="#api" className="text-sm hover:text-primary transition-colors">API</Link>
-            <Link href="https://github.com/thesarvagyakumar/ghostbox" target="_blank" className="text-sm hover:text-primary transition-colors">GitHub</Link>
+            <Link href="/blog" target="_blank" className="text-sm hover:text-primary transition-colors">Blog</Link>
+            <Link href="https://github.com/sarvagyakrcs" target="_blank" className="text-sm hover:text-primary transition-colors">GitHub</Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -213,7 +214,7 @@ export default function Home() {
             <div className="container mx-auto px-4 py-4 space-y-2">
               <Link href="#tools" className="block py-2 text-sm hover:text-primary transition-colors">Tools</Link>
               <Link href="#api" className="block py-2 text-sm hover:text-primary transition-colors">API</Link>
-              <Link href="https://github.com/thesarvagyakumar/ghostbox" target="_blank" className="block py-2 text-sm hover:text-primary transition-colors">GitHub</Link>
+              <Link href="https://github.com/sarvagyakrcs" target="_blank" className="block py-2 text-sm hover:text-primary transition-colors">GitHub</Link>
             </div>
           </div>
         )}
@@ -432,7 +433,7 @@ export default function Home() {
             <div>
               <h4 className="font-medium mb-3">Community</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="https://github.com/thesarvagyakumar/ghostbox" target="_blank" className="hover:text-primary transition-colors flex items-center gap-1">
+                <li><a href="https://github.com/sarvagyakrcs" target="_blank" className="hover:text-primary transition-colors flex items-center gap-1">
                   <Github className="h-4 w-4" />
                   GitHub
                 </a></li>
@@ -452,7 +453,7 @@ export default function Home() {
             <p>
               Built by{" "}
               <a 
-                href="https://github.com/thesarvagyakumar" 
+                href="https://thesarvagyakumar.site" 
                 target="_blank" 
                 className="underline hover:text-primary transition-colors"
               >

@@ -1,0 +1,433 @@
+---
+title: "Building Production-Ready APIs with Next.js: A Complete Guide"
+description: "Learn how to build scalable, secure, and maintainable APIs using Next.js App Router. From basic routes to advanced middleware, authentication, and database integration."
+date: "2024-01-20"
+tags: ["nextjs", "api", "backend", "fullstack", "typescript"]
+author: "Toolplane Team"
+heroImage: "/blogs/building-apis-nextjs/images/hero.jpg"
+ogImage: "/blogs/building-apis-nextjs/images/og-image.jpg"
+readTime: "8 min read"
+category: "Guide"
+---
+
+Next.js has evolved from a React framework into a full-stack solution that enables developers to build both frontend and backend functionality in a single codebase. With the introduction of the App Router, creating APIs has become more powerful and intuitive than ever.
+
+## Getting Started with Next.js API Routes
+
+The App Router introduces a new file-based routing system where API routes are defined using `route.ts` files. This approach provides better organization and TypeScript support out of the box.
+
+### Basic API Route Structure
+
+```typescript
+// app/api/users/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function GET(request: NextRequest) {
+  try {
+    // Your logic here
+    const users = await fetchUsers();
+    
+    return NextResponse.json({ 
+      users,
+      success: true 
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to fetch users' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const newUser = await createUser(body);
+    
+    return NextResponse.json(
+      { user: newUser, success: true },
+      { status: 201 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to create user' },
+      { status: 400 }
+    );
+  }
+}
+```
+
+<Callout type="note">
+The App Router supports all HTTP methods: GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS. Each method is exported as a named function from your route file.
+</Callout>
+
+## Advanced Routing Patterns
+
+### Dynamic Routes
+
+Dynamic routes allow you to create flexible API endpoints that can handle variable parameters:
+
+```typescript
+// app/api/users/[id]/route.ts
+interface RouteParams {
+  params: { id: string }
+}
+
+export async function GET(
+  request: NextRequest,
+  { params }: RouteParams
+) {
+  const userId = params.id;
+  
+  try {
+    const user = await getUserById(userId);
+    
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      );
+    }
+    
+    return NextResponse.json({ user });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Implementing Middleware and Authentication
+
+Middleware in Next.js runs before your API routes, making it perfect for authentication, logging, and request processing:
+
+```typescript
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { verifyJWT } from '@/lib/auth';
+
+export async function middleware(request: NextRequest) {
+  // Skip middleware for public routes
+  if (request.nextUrl.pathname.startsWith('/api/public')) {
+    return NextResponse.next();
+  }
+  
+  // Check for API routes that require authentication
+  if (request.nextUrl.pathname.startsWith('/api/protected')) {
+    const token = request.headers.get('authorization')?.split(' ')[1];
+    
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+    
+    try {
+      const payload = await verifyJWT(token);
+      
+      // Add user info to request headers
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set('x-user-id', payload.userId);
+      
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Invalid token' },
+        { status: 401 }
+      );
+    }
+  }
+  
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/api/:path*']
+};
+```
+
+## Database Integration
+
+### Setting Up Prisma with Next.js
+
+Prisma provides excellent TypeScript support and works seamlessly with Next.js:
+
+```typescript
+// lib/prisma.ts
+import { PrismaClient } from '@prisma/client';
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
+
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+```
+
+### Creating Data Access Layer
+
+Organize your database operations with a clean data access layer:
+
+```typescript
+// lib/users.ts
+import { prisma } from '@/lib/prisma';
+import { User, Prisma } from '@prisma/client';
+
+export async function createUser(data: Prisma.UserCreateInput): Promise<User> {
+  return prisma.user.create({
+    data: {
+      ...data,
+      createdAt: new Date(),
+    },
+  });
+}
+
+export async function getUserById(id: string): Promise<User | null> {
+  return prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      createdAt: true,
+      // Exclude sensitive fields like password
+    },
+  });
+}
+
+export async function updateUser(
+  id: string,
+  data: Prisma.UserUpdateInput
+): Promise<User> {
+  return prisma.user.update({
+    where: { id },
+    data,
+  });
+}
+```
+
+## Error Handling and Validation
+
+### Input Validation with Zod
+
+Use Zod for runtime type checking and validation:
+
+```typescript
+// lib/schemas.ts
+import { z } from 'zod';
+
+export const createUserSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
+export const updateUserSchema = z.object({
+  email: z.string().email().optional(),
+  name: z.string().min(2).optional(),
+}).strict(); // Prevent additional properties
+
+export type CreateUserInput = z.infer<typeof createUserSchema>;
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+```
+
+### Implementing Validation in Routes
+
+```typescript
+// app/api/users/route.ts
+import { createUserSchema } from '@/lib/schemas';
+import { ZodError } from 'zod';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    
+    // Validate input
+    const validatedData = createUserSchema.parse(body);
+    
+    const user = await createUser(validatedData);
+    
+    return NextResponse.json(
+      { user, success: true },
+      { status: 201 }
+    );
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { 
+          error: 'Validation failed',
+          details: error.errors
+        },
+        { status: 400 }
+      );
+    }
+    
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Rate Limiting and Security
+
+### Implementing Rate Limiting
+
+```typescript
+// lib/rate-limit.ts
+import { NextRequest } from 'next/server';
+
+interface RateLimitOptions {
+  windowMs: number;
+  maxRequests: number;
+}
+
+const requests = new Map<string, { count: number; resetTime: number }>();
+
+export function rateLimit(options: RateLimitOptions) {
+  return (request: NextRequest) => {
+    const ip = request.ip || 'unknown';
+    const now = Date.now();
+    const windowStart = now - options.windowMs;
+    
+    // Clean old entries
+    for (const [key, value] of requests.entries()) {
+      if (value.resetTime < now) {
+        requests.delete(key);
+      }
+    }
+    
+    const current = requests.get(ip);
+    
+    if (!current) {
+      requests.set(ip, { count: 1, resetTime: now + options.windowMs });
+      return { allowed: true, remaining: options.maxRequests - 1 };
+    }
+    
+    if (current.count >= options.maxRequests) {
+      return { allowed: false, remaining: 0 };
+    }
+    
+    current.count++;
+    return { allowed: true, remaining: options.maxRequests - current.count };
+  };
+}
+```
+
+## Testing Your APIs
+
+### Unit Testing with Jest
+
+```typescript
+// __tests__/api/users.test.ts
+import { createMocks } from 'node-mocks-http';
+import { GET, POST } from '@/app/api/users/route';
+
+describe('/api/users', () => {
+  describe('GET', () => {
+    it('should return users list', async () => {
+      const { req } = createMocks({ method: 'GET' });
+      
+      const response = await GET(req);
+      const data = await response.json();
+      
+      expect(response.status).toBe(200);
+      expect(data).toHaveProperty('users');
+      expect(Array.isArray(data.users)).toBe(true);
+    });
+  });
+  
+  describe('POST', () => {
+    it('should create a new user', async () => {
+      const { req } = createMocks({
+        method: 'POST',
+        body: {
+          email: 'test@example.com',
+          name: 'Test User',
+          password: 'password123'
+        },
+      });
+      
+      const response = await POST(req);
+      const data = await response.json();
+      
+      expect(response.status).toBe(201);
+      expect(data.success).toBe(true);
+      expect(data.user).toHaveProperty('email', 'test@example.com');
+    });
+  });
+});
+```
+
+## Performance Optimization
+
+### Caching Strategies
+
+Implement caching to improve API performance:
+
+```typescript
+// lib/cache.ts
+import { NextResponse } from 'next/server';
+
+const cache = new Map<string, { data: any; expiry: number }>();
+
+export function withCache(key: string, ttl: number = 60000) {
+  return function <T>(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<T>) {
+    const method = descriptor.value as any;
+    
+    descriptor.value = async function (...args: any[]) {
+      const cached = cache.get(key);
+      
+      if (cached && cached.expiry > Date.now()) {
+        return NextResponse.json(cached.data);
+      }
+      
+      const result = await method.apply(this, args);
+      const data = await result.json();
+      
+      cache.set(key, {
+        data,
+        expiry: Date.now() + ttl
+      });
+      
+      return NextResponse.json(data);
+    } as any;
+    
+    return descriptor;
+  };
+}
+```
+
+## Deployment Considerations
+
+When deploying your Next.js API, consider these best practices:
+
+1. **Environment Variables**: Use proper environment variable management
+2. **Database Connections**: Implement connection pooling for production
+3. **Monitoring**: Add logging and error tracking
+4. **Security Headers**: Implement proper CORS and security headers
+
+<Callout type="success">
+Next.js APIs automatically benefit from Edge Runtime optimization when deployed to Vercel, providing global distribution and reduced latency.
+</Callout>
+
+## Conclusion
+
+Building APIs with Next.js provides a seamless full-stack development experience. The App Router's file-based routing, combined with TypeScript support and middleware capabilities, makes it an excellent choice for modern web applications.
+
+Key benefits include:
+- **Unified codebase** for frontend and backend
+- **TypeScript support** throughout the stack
+- **Automatic optimization** and deployment benefits
+- **Rich ecosystem** with excellent tooling support
+
+Start building your next API with Next.js and experience the power of full-stack React development. 
