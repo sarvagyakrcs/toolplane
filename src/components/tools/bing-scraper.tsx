@@ -170,7 +170,7 @@ export function BingScraper() {
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base font-medium flex items-center gap-2">
                       <Search className="h-5 w-5" />
-                      Search Results for "{data.query}"
+                      Search Results for &quot;{data.query}&quot;
                     </CardTitle>
                     <Badge variant="outline">
                       {data.totalResults} total results
@@ -292,7 +292,7 @@ export function BingScraper() {
                   <Search className="h-4 w-4" />
                   <AlertTitle>No Results Found</AlertTitle>
                   <AlertDescription>
-                    No search results were found for "{data.query}". Try a different search query or check your spelling.
+                    No search results were found for &quot;{data.query}&quot;. Try a different search query or check your spelling.
                   </AlertDescription>
                 </Alert>
               )}

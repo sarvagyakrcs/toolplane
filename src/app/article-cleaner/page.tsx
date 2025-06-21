@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Sparkles } from "lucide-react";
 import { ArticleCleaner } from "@/components/tools/article-cleaner";
 
 export default function ArticleCleanerPage() {
@@ -9,15 +9,22 @@ export default function ArticleCleanerPage() {
         <div className="mb-8">
           <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Back to Toolkit
+            Back to Toolplane
           </Link>
         </div>
         
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Web Article Cleaner</h1>
-          <p className="text-muted-foreground">
-            Extract clean article content from any webpage and convert to HTML or Markdown with reading time and metadata.
+          <div className="inline-flex items-center gap-3 mb-4">
+            <Sparkles className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold tracking-tight">Web Article Cleaner</h1>
+          </div>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            🚀 One-click article extraction — Transform messy webpages into clean, readable content in seconds. 
+            Perfect for content creators and researchers.
           </p>
+          <div className="mt-4 text-sm text-muted-foreground">
+            ⚡ Instant processing • 📊 Reading time calculation • 🏷️ Auto tag extraction
+          </div>
         </div>
 
         <ArticleCleaner />

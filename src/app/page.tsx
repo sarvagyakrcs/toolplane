@@ -1,24 +1,17 @@
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   ArrowRight, 
-  Code, 
   FileText, 
   Globe, 
   ShoppingCart, 
   MessageSquare,
   QrCode,
-  Settings,
   Zap,
   Youtube,
   Building2,
   Images,
   Search,
-  Award,
-  HelpCircle,
-  MessageCircle,
-  Hash,
-  Newspaper,
   Sparkles
 } from "lucide-react";
 
@@ -112,50 +105,153 @@ export default function Home() {
   const categories = [...new Set(tools.map(tool => tool.category))];
 
   return (
-    <main className="min-h-screen w-full bg-background text-foreground">
+    <main className="min-h-screen w-full text-foreground bg-background">
       <div className="container mx-auto max-w-7xl px-4 py-12 md:py-20">
         <header className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-            GhostBox Toolkit
+            Toolplane
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
-            A comprehensive suite of {tools.length} powerful, developer-focused tools designed for the modern web. 
-            Elegant, fast, and ready to work.
+            Your Swiss Army Knife for the Web — Lightning-fast tools and powerful APIs built with precision and simplicity in mind.
           </p>
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <Link href="#tools" className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">
+              Browse Tools
+            </Link>
+            <Link href="https://github.com/thesarvagyakumar/ghostbox" target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-6 py-3 border border-border rounded-lg hover:bg-accent transition-colors">
+              Open Source
+            </Link>
+            <Link href="#api-docs" className="inline-flex items-center px-6 py-3 border border-border rounded-lg hover:bg-accent transition-colors">
+              API Docs
+            </Link>
+          </div>
           <div className="mt-6 text-sm text-muted-foreground">
-            🚀 <strong>{tools.length}</strong> tools available • More coming soon
+            ⚡ <strong>{tools.length}</strong> blazing-fast tools • 🔓 Free tier • 📦 Developer APIs
           </div>
         </header>
 
-        {categories.map((category) => (
+        {/* Search Bar */}
+        <div className="mb-12" id="tools">
+          <div className="max-w-2xl mx-auto">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search any tool (e.g., 'markdown', 'scraper', 'converter')"
+                className="w-full pl-12 pr-4 py-4 text-lg border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Why Toolplane Section */}
+        <div className="mb-16 text-center">
+          <h2 className="text-2xl font-semibold mb-8">Why Toolplane?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="text-3xl mb-2">⚡</div>
+              <h3 className="font-medium mb-1">Lightning Fast</h3>
+              <p className="text-sm text-muted-foreground">Pages load in &lt;500ms</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">🔓</div>
+              <h3 className="font-medium mb-1">Free & Open</h3>
+              <p className="text-sm text-muted-foreground">Powerful free tier</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">📦</div>
+              <h3 className="font-medium mb-1">Developer APIs</h3>
+              <p className="text-sm text-muted-foreground">Type-safe, ready to use</p>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl mb-2">🧠</div>
+              <h3 className="font-medium mb-1">Built to Scale</h3>
+              <p className="text-sm text-muted-foreground">Grows with your needs</p>
+            </div>
+          </div>
+        </div>
+
+        {categories.map((category) => {
+          const categoryConfig = {
+            "Scrapers": { icon: "🔍", description: "Extract data from any website" },
+            "Converters": { icon: "🔧", description: "Transform content between formats" },
+            "Generators": { icon: "🧩", description: "Create secure content and codes" }
+          };
+          
+          return (
           <div key={category} className="mb-12">
-            <h2 className="text-2xl font-semibold mb-6 text-center">{category}</h2>
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-semibold mb-2">
+                {categoryConfig[category as keyof typeof categoryConfig]?.icon} {category}
+              </h2>
+              <p className="text-muted-foreground">
+                {categoryConfig[category as keyof typeof categoryConfig]?.description}
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {tools
                 .filter(tool => tool.category === category)
                 .map((tool) => (
                   <Link href={tool.href} key={tool.href} className="group">
-                    <Card className="h-full transition-all duration-200 ease-in-out hover:shadow-lg hover:-translate-y-1">
-                      <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-base font-medium">{tool.title}</CardTitle>
-                        {tool.icon}
+                    <Card className="h-full transition-all duration-200 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:border-primary/50">
+                      <CardHeader className="flex flex-row items-center justify-between pb-3">
+                        <div className="flex items-center gap-3">
+                          {tool.icon}
+                          <CardTitle className="text-base font-medium group-hover:text-primary transition-colors">{tool.title}</CardTitle>
+                        </div>
                       </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-muted-foreground">{tool.description}</p>
+                      <CardContent className="pb-4">
+                        <p className="text-sm text-muted-foreground mb-4">{tool.description}</p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-primary font-medium">Try now →</span>
+                          <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary" />
+                        </div>
                       </CardContent>
-                      <div className="flex justify-end p-4">
-                          <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1" />
-                      </div>
                     </Card>
                   </Link>
                 ))}
             </div>
           </div>
-        ))}
+        )})}
 
 
-        <footer className="text-center mt-20 text-sm text-muted-foreground">
-          <p>Built with care by <a href="https://github.com/thesarvagyakumar" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">@thesarvagyakumar</a> • Open source on GitHub</p>
+        <footer className="mt-20 pt-12 border-t border-border">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <h3 className="font-semibold mb-4">Toolplane</h3>
+              <p className="text-sm text-muted-foreground">Your Swiss Army Knife for the Web</p>
+            </div>
+            <div>
+              <h4 className="font-medium mb-3">Tools</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link href="#tools" className="hover:text-primary">Browse All</Link></li>
+                <li><Link href="/scraper" className="hover:text-primary">Web Scraper</Link></li>
+                <li><Link href="/converter" className="hover:text-primary">Converters</Link></li>
+                <li><Link href="/qr-generator" className="hover:text-primary">Generators</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium mb-3">Developers</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link href="#api-docs" className="hover:text-primary">API Docs</Link></li>
+                <li><a href="https://github.com/thesarvagyakumar/ghostbox" target="_blank" rel="noopener noreferrer" className="hover:text-primary">GitHub</a></li>
+                <li><Link href="#" className="hover:text-primary">Rate Limits</Link></li>
+                <li><Link href="#" className="hover:text-primary">Status</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium mb-3">Community</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link href="#" className="hover:text-primary">Discord</Link></li>
+                <li><Link href="#" className="hover:text-primary">Newsletter</Link></li>
+                <li><Link href="#" className="hover:text-primary">Privacy</Link></li>
+                <li><Link href="#" className="hover:text-primary">Terms</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="text-center pt-8 border-t border-border text-sm text-muted-foreground">
+            <p>Built with care by <a href="https://github.com/thesarvagyakumar" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">@thesarvagyakumar</a> • Open source • ⚡ Blazing fast</p>
+          </div>
         </footer>
       </div>
     </main>
