@@ -2,10 +2,90 @@ import { QRGenerator } from "@/components/tools/qr-generator";
 import { ApiCard } from "@/components/ui/api-card";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "QR Code Generator - Create Custom QR Codes Instantly | Free Tool",
+  description: "Generate high-quality QR codes for URLs, text, and data. Customize colors and size. Free QR code generator with instant download. Perfect for marketing, business cards, and more.",
+  keywords: [
+    "qr code generator",
+    "free qr code generator",
+    "custom qr codes",
+    "qr code maker",
+    "generate qr code",
+    "qr code creator",
+    "qr code tool",
+    "download qr code",
+    "business qr codes",
+    "url to qr code",
+    "text to qr code",
+    "qr code api"
+  ],
+  openGraph: {
+    title: "QR Code Generator - Create Custom QR Codes | Toolplane",
+    description: "Generate high-quality QR codes for any URL or text. Customize colors and size. Free tool with instant download and API access.",
+    type: "website",
+    url: "https://toolplane.xyz/qr-generator",
+    images: [
+      {
+        url: "/og-qr-generator.png",
+        width: 1200,
+        height: 630,
+        alt: "QR Code Generator Tool",
+      }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "QR Code Generator - Create Custom QR Codes Instantly",
+    description: "Free QR code generator. Create custom QR codes for URLs, text, and data. Instant download with customization options.",
+    images: ["/twitter-qr-generator.png"],
+  },
+  alternates: {
+    canonical: "https://toolplane.xyz/qr-generator",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function QRGeneratorPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "QR Code Generator",
+    "description": "Generate customizable QR codes for any text or URL with options for size and colors. Free tool with API access.",
+    "url": "https://toolplane.xyz/qr-generator",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Custom QR code generation",
+      "Color customization",
+      "Size adjustment",
+      "Instant download",
+      "High resolution output",
+      "API access included"
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Toolplane"
+    }
+  };
+
   return (
     <main className="min-h-screen w-full bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
+      />
       <div className="container mx-auto max-w-5xl px-4 py-8">
         <div className="mb-8">
           <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
