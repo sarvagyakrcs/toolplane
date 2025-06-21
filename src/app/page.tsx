@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SearchTools, type Tool } from "@/components/ui/search-tools";
 import { 
   ArrowRight, 
   FileText, 
@@ -15,7 +19,7 @@ import {
   Sparkles
 } from "lucide-react";
 
-const tools = [
+const tools: Tool[] = [
   // Scrapers
   {
     title: "Web Scraper",
@@ -102,7 +106,20 @@ const tools = [
 ];
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
   const categories = [...new Set(tools.map(tool => tool.category))];
+
+  // Filter tools based on search query
+  const filteredTools = tools.filter(tool =>
+    tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    tool.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Group filtered tools by category
+  const filteredCategories = categories.filter(category =>
+    filteredTools.some(tool => tool.category === category)
+  );
 
   return (
     <main className="min-h-screen w-full text-foreground bg-background">
@@ -130,19 +147,24 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Search Bar */}
+        {/* Command Palette Search */}
         <div className="mb-12" id="tools">
-          <div className="max-w-2xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search any tool (e.g., 'markdown', 'scraper', 'converter')"
-                className="w-full pl-12 pr-4 py-4 text-lg border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-              />
-            </div>
-          </div>
+          <SearchTools 
+            tools={tools} 
+            variant="command-palette" 
+            onSearchChange={setSearchQuery}
+          />
         </div>
+
+        {/* Search Results Info */}
+        {searchQuery && (
+          <div className="mb-8 text-center">
+            <p className="text-muted-foreground">
+              Found {filteredTools.length} tool{filteredTools.length !== 1 ? 's' : ''} 
+              {searchQuery && ` for "${searchQuery}"`}
+            </p>
+          </div>
+        )}
 
         {/* Why Toolplane Section */}
         <div className="mb-16 text-center">
@@ -171,7 +193,7 @@ export default function Home() {
           </div>
         </div>
 
-        {categories.map((category) => {
+        {filteredCategories.map((category) => {
           const categoryConfig = {
             "Scrapers": { icon: "🔍", description: "Extract data from any website" },
             "Converters": { icon: "🔧", description: "Transform content between formats" },
@@ -189,7 +211,7 @@ export default function Home() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {tools
+              {filteredTools
                 .filter(tool => tool.category === category)
                 .map((tool) => (
                   <Link href={tool.href} key={tool.href} className="group">
@@ -214,6 +236,22 @@ export default function Home() {
           </div>
         )})}
 
+        {/* No Results Found */}
+        {searchQuery && filteredTools.length === 0 && (
+          <div className="text-center py-16">
+            <Search className="mx-auto h-12 w-12 text-muted-foreground/50 mb-4" />
+            <h3 className="text-lg font-medium mb-2">No tools found</h3>
+            <p className="text-muted-foreground mb-4">
+              No tools match &quot;{searchQuery}&quot;. Try a different search term.
+            </p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="text-primary hover:underline"
+            >
+              Clear search and show all tools
+            </button>
+          </div>
+        )}
 
         <footer className="mt-20 pt-12 border-t border-border">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
