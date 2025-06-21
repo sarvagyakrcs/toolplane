@@ -4,25 +4,39 @@ import { ChevronLeft } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Web Scraper Tool - Extract Data from Any Website | Free CSS Selector Tool",
-  description: "Professional web scraper tool to extract data from any website using CSS selectors. Free, fast, and reliable. No coding required. Get structured data instantly with our web scraping tool.",
+  title: "Free Web Scraper Tool + API | Extract Data from Any Website | No Coding Required",
+  description: "Professional web scraper with free API access. Extract data from any website using CSS selectors. No coding required, unlimited use. Get structured data instantly from HTML pages with our free web scraping tool and REST API.",
   keywords: [
-    "web scraper",
-    "website scraper",
-    "data extraction tool",
-    "css selector scraper",
-    "web scraping tool",
-    "extract website data",
     "free web scraper",
-    "html data extractor",
-    "website data extraction",
-    "web scraping service",
-    "scrape any website",
-    "data harvesting tool"
+    "web scraping API free",
+    "extract data from website",
+    "CSS selector scraper",
+    "no code web scraper",
+    "web scraping tool online",
+    "free API web scraping",
+    "HTML data extractor",
+    "website data extraction tool",
+    "scrape any website free",
+    "web scraper with API",
+    "data mining tool free",
+    "content extraction API",
+    "web scraping service free",
+    "DOM parser tool",
+    "HTML parser online",
+    "free alternative to import.io",
+    "free alternative to scrapy",
+    "web scraping without coding",
+    "REST API web scraper",
+    "JSON data extraction",
+    "automated data collection",
+    "website content scraper",
+    "free data harvesting tool",
+    "bulk data extraction",
+    "real-time web scraping"
   ],
   openGraph: {
-    title: "Web Scraper Tool - Extract Data from Any Website | Toolplane",
-    description: "Extract data from any website using CSS selectors. Professional web scraping tool - free, fast, and reliable. No coding required.",
+    title: "Free Web Scraper Tool + API | Extract Data from Any Website | Toolplane",
+    description: "Professional web scraper with free API access. Extract data from any website using CSS selectors. No coding required, unlimited use. Free alternative to expensive scraping services.",
     type: "website",
     url: "https://toolplane.xyz/scraper",
     images: [
@@ -30,14 +44,14 @@ export const metadata: Metadata = {
         url: "/og-web-scraper.png",
         width: 1200,
         height: 630,
-        alt: "Web Scraper Tool",
+        alt: "Free Web Scraper Tool with API Access",
       }
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Web Scraper Tool - Extract Data from Any Website",
-    description: "Professional web scraping tool with CSS selectors. Extract data from any website instantly. Free to use.",
+    title: "Free Web Scraper Tool + API | Extract Data from Any Website",
+    description: "Professional web scraping tool with free API access. Extract data from any website instantly using CSS selectors. No coding required.",
     images: ["/twitter-web-scraper.png"],
   },
   alternates: {
@@ -53,27 +67,36 @@ export default function ScraperPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Web Scraper Tool",
-    "description": "Extract data from any website using CSS selectors. Professional-grade web scraping tool for developers, researchers, and businesses.",
+    "name": "Free Web Scraper Tool with API",
+    "description": "Extract data from any website using CSS selectors. Professional-grade web scraping tool with free API access for developers, researchers, and businesses. No coding required.",
     "url": "https://toolplane.xyz/scraper",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Web Browser",
     "offers": {
       "@type": "Offer",
       "price": "0",
-      "priceCurrency": "USD"
+      "priceCurrency": "USD",
+      "description": "Free web scraping tool with unlimited API access"
     },
     "featureList": [
-      "CSS selector support",
+      "Free API access",
+      "CSS selector support", 
+      "No coding required",
       "Real-time data extraction",
-      "Structured data output",
+      "Structured JSON output",
       "HTML attribute extraction",
       "Error handling",
-      "API access"
+      "Unlimited usage",
+      "REST API endpoints",
+      "Bulk data extraction"
     ],
     "publisher": {
       "@type": "Organization",
       "name": "Toolplane"
+    },
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Developers, Researchers, Data Analysts, Businesses"
     }
   };
 
