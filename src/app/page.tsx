@@ -1,103 +1,117 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  ArrowRight, 
+  Code, 
+  FileText, 
+  Globe, 
+  ShoppingCart, 
+  MessageSquare,
+  QrCode,
+  Settings,
+  Zap
+} from "lucide-react";
+
+const tools = [
+  // Scrapers
+  {
+    title: "Web Scraper",
+    description: "Extract data from any website with CSS selectors.",
+    href: "/scraper",
+    icon: <Globe className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
+  {
+    title: "Amazon Price Scraper",
+    description: "Extract price, title, and image from any Amazon product.",
+    href: "/amazon-scraper",
+    icon: <ShoppingCart className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
+  {
+    title: "Reddit Post Scraper",
+    description: "Get upvotes, comments, and metadata from Reddit posts.",
+    href: "/reddit-scraper",
+    icon: <MessageSquare className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
+  
+  // Converters
+  {
+    title: "Markdown Converter",
+    description: "Convert any webpage into clean, readable Markdown.",
+    href: "/converter",
+    icon: <FileText className="h-8 w-8 text-primary" />,
+    category: "Converters"
+  },
+
+  // Generators
+  {
+    title: "QR Code Generator",
+    description: "Generate QR codes for any text, URL, or data.",
+    href: "/qr-generator",
+    icon: <QrCode className="h-8 w-8 text-primary" />,
+    category: "Generators"
+  },
+  {
+    title: "Password Generator",
+    description: "Generate secure passwords with custom criteria.",
+    href: "/password-generator",
+    icon: <Zap className="h-8 w-8 text-primary" />,
+    category: "Generators"
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const categories = [...new Set(tools.map(tool => tool.category))];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  return (
+    <main className="min-h-screen w-full bg-background text-foreground">
+      <div className="container mx-auto max-w-7xl px-4 py-12 md:py-20">
+        <header className="text-center mb-16">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+            GhostBox Toolkit
+          </h1>
+          <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
+            A comprehensive suite of {tools.length} powerful, developer-focused tools designed for the modern web. 
+            Elegant, fast, and ready to work.
+          </p>
+          <div className="mt-6 text-sm text-muted-foreground">
+            🚀 <strong>{tools.length}</strong> tools available • More coming soon
+          </div>
+        </header>
+
+        {categories.map((category) => (
+          <div key={category} className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 text-center">{category}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {tools
+                .filter(tool => tool.category === category)
+                .map((tool) => (
+                  <Link href={tool.href} key={tool.href} className="group">
+                    <Card className="h-full transition-all duration-200 ease-in-out hover:shadow-lg hover:-translate-y-1">
+                      <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardTitle className="text-base font-medium">{tool.title}</CardTitle>
+                        {tool.icon}
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-muted-foreground">{tool.description}</p>
+                      </CardContent>
+                      <div className="flex justify-end p-4">
+                          <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1" />
+                      </div>
+                    </Card>
+                  </Link>
+                ))}
+            </div>
+          </div>
+        ))}
+
+
+        <footer className="text-center mt-20 text-sm text-muted-foreground">
+          <p>Built with care by <a href="https://github.com/thesarvagyakumar" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">@thesarvagyakumar</a> • Open source on GitHub</p>
+        </footer>
+      </div>
+    </main>
   );
 }
