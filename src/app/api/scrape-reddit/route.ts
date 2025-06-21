@@ -8,12 +8,13 @@ export async function GET(request: NextRequest) {
   return pipe.process(async () => {
     const { searchParams } = new URL(request.url);
     const url = searchParams.get('url');
+    const includeComments = searchParams.get('includeComments') === 'true';
     
     if (!url) {
       throw new Error('URL parameter is required');
     }
     
-    const result = await scrapeRedditPost(url);
+    const result = await scrapeRedditPost(url, includeComments);
     return result;
   });
 } 
