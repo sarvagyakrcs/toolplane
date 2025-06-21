@@ -9,7 +9,11 @@ import {
   MessageSquare,
   QrCode,
   Settings,
-  Zap
+  Zap,
+  Twitter,
+  Youtube,
+  Building2,
+  Images
 } from "lucide-react";
 
 const tools = [
@@ -30,9 +34,37 @@ const tools = [
   },
   {
     title: "Reddit Post Scraper",
-    description: "Get upvotes, comments, and metadata from Reddit posts.",
+    description: "Get upvotes, comments, and metadata from Reddit posts with optional comment extraction.",
     href: "/reddit-scraper",
     icon: <MessageSquare className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
+  {
+    title: "Twitter Post Scraper",
+    description: "Extract tweet content, author info, and media from Twitter/X posts.",
+    href: "/twitter-scraper",
+    icon: <Twitter className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
+  {
+    title: "YouTube Video Stats",
+    description: "Get video details, views, likes, duration, and channel info.",
+    href: "/youtube-scraper",
+    icon: <Youtube className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
+  {
+    title: "Alibaba Product Scraper",
+    description: "Extract product info, pricing, and supplier details from Alibaba.",
+    href: "/alibaba-scraper",
+    icon: <Building2 className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
+  {
+    title: "Website Image Extractor",
+    description: "Extract all images from any website with metadata and filtering.",
+    href: "/image-scraper",
+    icon: <Images className="h-8 w-8 text-primary" />,
     category: "Scrapers"
   },
   

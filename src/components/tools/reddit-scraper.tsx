@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Terminal, Loader2, ArrowUp, MessageCircle, User, ChevronRight, ChevronDown } from "lucide-react";
 import { scrapeRedditPost } from "@/app/actions/scrapeReddit";
+import { ApiCard } from "@/components/ui/api-card";
 
 interface RedditComment {
   author: string;
@@ -107,6 +108,51 @@ export function RedditScraper() {
   const [error, setError] = useState<string | null>(null);
   const [expandedComments, setExpandedComments] = useState<Set<number>>(new Set());
 
+  const apiDocumentation = {
+    endpoint: "/api/scrape-reddit",
+    method: "GET" as const,
+    title: "Reddit Post Scraper API",
+    description: "Extract post data from Reddit URLs including title, upvotes, comments count, author, and optionally the comments themselves.",
+    parameters: [
+      {
+        name: "url",
+        type: "string",
+        required: true,
+        description: "Reddit post URL",
+        example: "https://www.reddit.com/r/programming/comments/xyz/awesome_post/"
+      },
+      {
+        name: "includeComments",
+        type: "boolean",
+        required: false,
+        description: "Whether to include comments in the response (default: false)",
+        example: "true"
+      }
+    ],
+    example: {
+      request: "/api/scrape-reddit?url=https://www.reddit.com/r/programming/comments/xyz&includeComments=true",
+      response: {
+        title: "Why I Love Programming",
+        upvotes: "1.2k",
+        comments: "156",
+        author: "coder123",
+        subreddit: "programming",
+        postContent: "Programming has changed my life...",
+        commentsList: [
+          {
+            author: "developer456",
+            body: "Great post! I completely agree.",
+            score: "42",
+            depth: 0,
+            replies: []
+          }
+        ]
+      }
+    },
+    rateLimit: "20 requests/minute",
+    category: "scrape" as const
+  };
+
   const handleScrape = async () => {
     if (!url) {
       setError("Please enter a Reddit post URL.");
@@ -138,7 +184,8 @@ export function RedditScraper() {
   };
 
   return (
-    <Card className="w-full shadow-sm">
+    <div className="space-y-8">
+      <Card className="w-full shadow-sm">
       <CardHeader>
         <CardTitle className="text-xl font-medium">Reddit Post Scraper</CardTitle>
         <CardDescription>
@@ -270,5 +317,8 @@ export function RedditScraper() {
         )}
       </CardContent>
     </Card>
+
+    <ApiCard {...apiDocumentation} />
+  </div>
   );
 } 
