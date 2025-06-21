@@ -12,7 +12,14 @@ import {
   Zap,
   Youtube,
   Building2,
-  Images
+  Images,
+  Search,
+  Award,
+  HelpCircle,
+  MessageCircle,
+  Hash,
+  Newspaper,
+  Sparkles
 } from "lucide-react";
 
 const tools = [
@@ -59,6 +66,14 @@ const tools = [
     icon: <Images className="h-8 w-8 text-primary" />,
     category: "Scrapers"
   },
+
+  {
+    title: "Bing Search Results",
+    description: "Extract search results and suggestions from Microsoft Bing search engine.",
+    href: "/bing-scraper",
+    icon: <Search className="h-8 w-8 text-primary" />,
+    category: "Scrapers"
+  },
   
   // Converters
   {
@@ -66,6 +81,13 @@ const tools = [
     description: "Convert any webpage into clean, readable Markdown.",
     href: "/converter",
     icon: <FileText className="h-8 w-8 text-primary" />,
+    category: "Converters"
+  },
+  {
+    title: "Web Article Cleaner",
+    description: "Extract clean article content and convert to HTML or Markdown with reading time.",
+    href: "/article-cleaner",
+    icon: <Sparkles className="h-8 w-8 text-primary" />,
     category: "Converters"
   },
 
