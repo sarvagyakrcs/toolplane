@@ -24,10 +24,13 @@ import {
   ExternalLink,
   Github,
   Menu,
-  X
+  X,
+  Coffee,
+  Heart
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { offside } from "@/lib/fonts";
+import BuyMeACoffeeButton from "@/components/buy-me-a-coffee-button";
 
 interface Tool {
   title: string;
@@ -197,6 +200,7 @@ export default function Home() {
             <Link href="#api" className="text-sm hover:text-primary transition-colors">API</Link>
             <Link href="/blog" target="_blank" className="text-sm hover:text-primary transition-colors">Blog</Link>
             <Link href="https://github.com/sarvagyakrcs" target="_blank" className="text-sm hover:text-primary transition-colors">GitHub</Link>
+            <BuyMeACoffeeButton />
           </div>
 
           {/* Mobile Menu Button */}
@@ -214,7 +218,11 @@ export default function Home() {
             <div className="container mx-auto px-4 py-4 space-y-2">
               <Link href="#tools" className="block py-2 text-sm hover:text-primary transition-colors">Tools</Link>
               <Link href="#api" className="block py-2 text-sm hover:text-primary transition-colors">API</Link>
+              <Link href="/blog" target="_blank" className="block py-2 text-sm hover:text-primary transition-colors">Blog</Link>
               <Link href="https://github.com/sarvagyakrcs" target="_blank" className="block py-2 text-sm hover:text-primary transition-colors">GitHub</Link>
+              <div className="pt-2">
+                <BuyMeACoffeeButton variant="outline" size="sm" />
+              </div>
             </div>
           </div>
         )}
@@ -410,6 +418,65 @@ export default function Home() {
             </p>
           </div>
         )}
+      </section>
+
+      {/* Support Section */}
+      <section className="bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 dark:from-yellow-950/20 dark:via-orange-950/20 dark:to-yellow-950/20 border-y">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mb-6">
+              <Coffee className="h-8 w-8 text-white" />
+            </div>
+            
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Love these tools? ☕
+            </h2>
+            
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              If TOOLPLANE has saved you time or helped with your projects, consider supporting the development 
+              with a coffee. Your support helps keep these tools free and continuously improved!
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+              <BuyMeACoffeeButton variant="premium" size="lg" />
+              <div className="text-sm text-muted-foreground">
+                💡 <strong>100% free tools</strong> • No ads • No tracking
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full mb-3">
+                  <Zap className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="font-medium mb-2">Keep Tools Fast</h3>
+                <p className="text-sm text-muted-foreground">
+                  Help maintain blazing-fast performance and reliable uptime
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-3">
+                  <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="font-medium mb-2">Add New Features</h3>
+                <p className="text-sm text-muted-foreground">
+                  Fund development of new tools and API endpoints
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full mb-3">
+                  <Heart className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                </div>
+                <h3 className="font-medium mb-2">Show Appreciation</h3>
+                <p className="text-sm text-muted-foreground">
+                  A simple way to say thanks for the free tools and APIs
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Footer */}
