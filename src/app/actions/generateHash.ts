@@ -21,7 +21,7 @@ export async function generateHashes(text: string): Promise<HashResult> {
       sha256: createHash('sha256').update(text).digest('hex'),
       sha512: createHash('sha512').update(text).digest('hex'),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Hash generation error:", error);
     throw new Error("Failed to generate hashes.");
   }

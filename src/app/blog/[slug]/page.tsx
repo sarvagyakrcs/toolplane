@@ -9,9 +9,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Calendar, Clock, User, Share2, BookOpen, Rss } from 'lucide-react';
 
 interface BlogPostPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -22,7 +20,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const post = getBlogPost(params.slug);
+  const { slug } = await params;
+  const post = getBlogPost(slug);
 
   if (!post) {
     return {
@@ -68,8 +67,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   };
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = getBlogPost(params.slug);
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  const post = getBlogPost(slug);
 
   if (!post) {
     notFound();

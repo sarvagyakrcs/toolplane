@@ -28,7 +28,7 @@ export async function generateQRCode(
     const qrCodeDataURL = await QRCode.toDataURL(text, qrOptions);
     return qrCodeDataURL;
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("QR Code generation error:", error);
     throw new Error("Failed to generate QR code.");
   }

@@ -41,8 +41,9 @@ export function PasswordGenerator() {
     try {
       const newPassword = await generatePassword(options);
       setPassword(newPassword);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

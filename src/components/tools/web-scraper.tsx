@@ -36,8 +36,9 @@ export function WebScraper() {
     try {
       const scrapedData = await scrapeWebsite(url, selector);
       setData(scrapedData);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -213,8 +213,9 @@ export async function scrapeSiteImages(url: string, limit: number = 50): Promise
       pageTitle,
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Image scraping error:", error);
-    throw new Error(error.message || "An unknown error occurred during image scraping.");
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage || "An unknown error occurred during image scraping.");
   }
 } 

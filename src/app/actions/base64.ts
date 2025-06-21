@@ -16,7 +16,7 @@ export async function encodeBase64(text: string): Promise<Base64Result> {
       result: encoded,
       operation: 'encode'
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Base64 encoding error:", error);
     throw new Error("Failed to encode text to Base64.");
   }
@@ -33,7 +33,7 @@ export async function decodeBase64(base64Text: string): Promise<Base64Result> {
       result: decoded,
       operation: 'decode'
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Base64 decoding error:", error);
     throw new Error("Invalid Base64 string or decoding failed.");
   }

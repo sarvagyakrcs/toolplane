@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
   BookOpen, 
-  Search, 
-  Menu
 } from 'lucide-react';
 import { offside } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
@@ -227,15 +225,15 @@ export default function BlogPage() {
                 </section>
               )}
 
-              {/* Editor's Picks Grid */}
+              {/* Editors Picks Grid */}
               {editorsPicks.length > 0 && (
                 <section className="py-8 border-b border-gray-200">
                   <h3 className="text-xs font-bold tracking-wider uppercase mb-6 border-b border-black pb-2 max-w-fit">
-                    Editor's Picks
+                    Editor&apos;s Picks
                   </h3>
                   
                   <div className="grid md:grid-cols-3 gap-8">
-                    {editorsPicks.map((post, index) => (
+                    {editorsPicks.map((post) => (
                       <article key={post.slug} className="group space-y-3">
                         <Link href={`/blog/${post.slug}`}>
                           {post.heroImage && (
@@ -279,7 +277,7 @@ export default function BlogPage() {
                   </h3>
                   
                   <div className="space-y-6">
-                    {recentPosts.map((post, index) => (
+                    {recentPosts.map((post) => (
                       <article key={post.slug} className="group border-b border-gray-100 pb-6 last:border-b-0">
                         <Link href={`/blog/${post.slug}`}>
                           <div className="grid md:grid-cols-5 gap-6">

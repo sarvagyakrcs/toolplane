@@ -35,8 +35,9 @@ export function HashGenerator() {
     try {
       const result = await generateHashes(text);
       setHashes(result);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

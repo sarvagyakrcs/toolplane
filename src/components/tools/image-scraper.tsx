@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Terminal, Loader2, Images, Download, Copy, Check, ExternalLink, Eye, Maximize } from "lucide-react";
+import { Terminal, Loader2, Images, Download, Copy, Check, ExternalLink, Eye } from "lucide-react";
 import { scrapeSiteImages } from "@/app/actions/scrapeImages";
 import { ApiCard } from "@/components/ui/api-card";
 
@@ -49,8 +49,9 @@ export function ImageScraper() {
     try {
       const scrapedData = await scrapeSiteImages(url, limit);
       setData(scrapedData);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

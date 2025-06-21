@@ -64,8 +64,9 @@ export async function convertToMarkdown(
 
     return { markdown, title: title || "Untitled" };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Conversion error:", error);
-    throw new Error(error.message || "An unknown error occurred during conversion.");
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage || "An unknown error occurred during conversion.");
   }
 } 

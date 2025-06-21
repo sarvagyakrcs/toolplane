@@ -54,9 +54,10 @@ export async function scrapeWebsite(
     });
 
     return data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Scraping error:", error);
     // Re-throw the error to be caught by the client
-    throw new Error(error.message || "An unknown error occurred during scraping.");
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage || "An unknown error occurred during scraping.");
   }
 } 

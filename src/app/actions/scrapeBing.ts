@@ -63,7 +63,7 @@ export async function scrapeBingSearch(query: string, numResults: number = 10): 
       if (!title) return;
 
       // Extract URL
-      let url = titleEl.attr('href') || '';
+      const url = titleEl.attr('href') || '';
 
       // Extract description
       const description = $result.find('.b_caption p, .b_snippet').first().text().trim() || 
@@ -92,7 +92,7 @@ export async function scrapeBingSearch(query: string, numResults: number = 10): 
         
         const title = $result.find('h2, h3, .b_entityTitle').first().text().trim();
         const linkEl = $result.find('a[href]').first();
-        let url = linkEl.attr('href') || '';
+        const url = linkEl.attr('href') || '';
         
         if (!title || !url) return;
         
@@ -152,17 +152,19 @@ export async function scrapeBingSearch(query: string, numResults: number = 10): 
       featuredSnippet
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Bing search scraping error:", error);
     
-    if (error.message.includes('429')) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    
+    if (errorMessage.includes('429')) {
       throw new Error("Too many requests to Bing Search. Please try again later.");
     }
     
-    if (error.message.includes('403')) {
+    if (errorMessage.includes('403')) {
       throw new Error("Bing Search blocked this request. Try using a different search query or wait before retrying.");
     }
     
-    throw new Error(error.message || "An unknown error occurred during Bing search scraping.");
+    throw new Error(errorMessage || "An unknown error occurred during Bing search scraping.");
   }
 } 

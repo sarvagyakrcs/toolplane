@@ -19,6 +19,15 @@ interface CleanArticleData {
   image: string | null;
 }
 
+interface ExtractedArticle {
+  title?: string | null;
+  description?: string | null;
+  content?: string | null;
+  author?: string | null;
+  published?: string | null;
+  image?: string | null;
+}
+
 export async function cleanWebArticle(url: string, outputFormat: 'html' | 'markdown' | 'both' = 'both'): Promise<CleanArticleData> {
   if (!url) {
     throw new Error("A valid article URL is required.");
@@ -31,11 +40,11 @@ export async function cleanWebArticle(url: string, outputFormat: 'html' | 'markd
 
   try {
     // Extract article using @extractus/article-extractor with better error handling
-    let article: any = null;
+    let article: ExtractedArticle | null = null;
     
     try {
       article = await extract(url);
-    } catch (extractError: any) {
+    } catch (extractError: unknown) {
       console.warn("Article extractor failed, trying manual approach:", extractError);
       
       // Fallback: try manual fetch and basic parsing
@@ -88,8 +97,9 @@ export async function cleanWebArticle(url: string, outputFormat: 'html' | 'markd
           image: $('meta[property="og:image"]').attr('content') || null,
         };
         
-      } catch (fallbackError: any) {
-        throw new Error(`Unable to access article. ${fallbackError.message || 'The website may be blocking automated requests or require authentication.'}`);
+      } catch (fallbackError: unknown) {
+        const errorMessage = fallbackError instanceof Error ? fallbackError.message : 'Unknown error';
+        throw new Error(`Unable to access article. ${errorMessage || 'The website may be blocking automated requests or require authentication.'}`);
       }
     }
 
@@ -154,14 +164,14 @@ export async function cleanWebArticle(url: string, outputFormat: 'html' | 'markd
       for (const pattern of tagPatterns) {
         const matches = article.content.match(pattern);
         if (matches) {
-                  matches.forEach((match: string) => {
-          const cleanTag = match.replace(/^(?:tags?|keywords?|topics?):\s*/i, '')
-                               .replace('#', '')
-                               .trim();
-          if (cleanTag.length > 2 && cleanTag.length < 30 && !tags.includes(cleanTag)) {
-            tags.push(cleanTag);
-          }
-        });
+          matches.forEach((match: string) => {
+            const cleanTag = match.replace(/^(?:tags?|keywords?|topics?):\s*/i, '')
+                                 .replace('#', '')
+                                 .trim();
+            if (cleanTag.length > 2 && cleanTag.length < 30 && !tags.includes(cleanTag)) {
+              tags.push(cleanTag);
+            }
+          });
         }
       }
     }
@@ -185,17 +195,19 @@ export async function cleanWebArticle(url: string, outputFormat: 'html' | 'markd
       image: article.image || null,
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Article cleaning error:", error);
     
-    if (error.message.includes('timeout')) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    
+    if (errorMessage.includes('timeout')) {
       throw new Error("The article took too long to load. Please try again or check if the URL is accessible.");
     }
     
-    if (error.message.includes('404') || error.message.includes('403')) {
+    if (errorMessage.includes('404') || errorMessage.includes('403')) {
       throw new Error("The article could not be accessed. Please check if the URL is correct and publicly accessible.");
     }
     
-    throw new Error(error.message || "An unknown error occurred while cleaning the article.");
+    throw new Error(errorMessage || "An unknown error occurred while cleaning the article.");
   }
 } 

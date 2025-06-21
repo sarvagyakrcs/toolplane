@@ -14,6 +14,17 @@ interface YouTubeVideoData {
   subscribers: string | null;
 }
 
+interface JsonLdData {
+  '@type'?: string;
+  interactionStatistic?: Array<{
+    '@type'?: string;
+    interactionType?: string;
+    userInteractionCount?: number;
+  }>;
+  duration?: string;
+  uploadDate?: string;
+}
+
 export async function scrapeYouTubeVideo(url: string): Promise<YouTubeVideoData> {
   if (!url || !url.includes("youtube.com") && !url.includes("youtu.be")) {
     throw new Error("A valid YouTube video URL is required.");
@@ -71,16 +82,15 @@ export async function scrapeYouTubeVideo(url: string): Promise<YouTubeVideoData>
     let likes = "N/A";
     let duration = "N/A";
     let uploadDate = "N/A";
-    let subscribers = "N/A";
 
     // Look for JSON-LD structured data
     $('script[type="application/ld+json"]').each((_, element) => {
       try {
-        const jsonData = JSON.parse($(element).html() || '{}');
+        const jsonData: JsonLdData = JSON.parse($(element).html() || '{}');
         if (jsonData['@type'] === 'VideoObject') {
           if (jsonData.interactionStatistic) {
             const stats = jsonData.interactionStatistic;
-            const viewStat = stats.find((stat: any) => stat['@type'] === 'InteractionCounter' && stat.interactionType?.includes('WatchAction'));
+            const viewStat = stats.find((stat) => stat['@type'] === 'InteractionCounter' && stat.interactionType?.includes('WatchAction'));
             if (viewStat) {
               views = viewStat.userInteractionCount?.toString() || views;
             }
@@ -94,7 +104,7 @@ export async function scrapeYouTubeVideo(url: string): Promise<YouTubeVideoData>
             uploadDate = new Date(jsonData.uploadDate).toLocaleDateString() || uploadDate;
           }
         }
-      } catch (e) {
+      } catch {
         // Continue if JSON parsing fails
       }
     });
@@ -167,8 +177,9 @@ export async function scrapeYouTubeVideo(url: string): Promise<YouTubeVideoData>
       subscribers: "N/A", // Subscriber count is not easily accessible
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("YouTube scraping error:", error);
-    throw new Error(error.message || "An unknown error occurred during YouTube scraping.");
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage || "An unknown error occurred during YouTube scraping.");
   }
 } 

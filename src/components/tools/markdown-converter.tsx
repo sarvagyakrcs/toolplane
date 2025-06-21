@@ -41,8 +41,9 @@ export function MarkdownConverter() {
     try {
       const result = await convertToMarkdown(url, options);
       setMarkdown(result.markdown);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

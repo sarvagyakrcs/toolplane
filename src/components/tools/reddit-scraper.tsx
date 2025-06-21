@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
+
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Terminal, Loader2, ArrowUp, MessageCircle, User, ChevronRight, ChevronDown } from "lucide-react";
@@ -166,8 +166,9 @@ export function RedditScraper() {
     try {
       const scrapedData = await scrapeRedditPost(url, includeComments);
       setData(scrapedData);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Terminal, Loader2, Sparkles, Clock, BookOpen, Copy, Check, Eye, FileText } from "lucide-react";
+import { Terminal, Loader2, Sparkles, Clock, BookOpen, Copy, Check, FileText } from "lucide-react";
 import { cleanWebArticle } from "@/app/actions/cleanArticle";
 import { ApiCard } from "@/components/ui/api-card";
 
@@ -51,8 +51,9 @@ export function ArticleCleaner() {
     try {
       const cleanedData = await cleanWebArticle(url, outputFormat);
       setData(cleanedData);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

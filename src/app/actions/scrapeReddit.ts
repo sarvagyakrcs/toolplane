@@ -20,6 +20,35 @@ interface RedditPostData {
   commentsList?: RedditComment[];
 }
 
+interface RedditJsonData {
+  data?: {
+    children?: Array<{
+      data?: {
+        title?: string;
+        ups?: number;
+        num_comments?: number;
+        author?: string;
+        subreddit?: string;
+        selftext?: string;
+      };
+    }>;
+  };
+}
+
+interface RedditCommentsData {
+  data?: {
+    children?: Array<{
+      data?: {
+        kind?: string;
+        body?: string;
+        author?: string;
+        score?: number;
+        replies?: RedditCommentsData;
+      };
+    }>;
+  };
+}
+
 export async function scrapeRedditPost(url: string, includeComments: boolean = false): Promise<RedditPostData> {
   if (!url || !new URL(url).hostname.includes("reddit")) {
     throw new Error("A valid Reddit post URL is required.");
@@ -37,7 +66,7 @@ export async function scrapeRedditPost(url: string, includeComments: boolean = f
       });
       
       if (jsonResponse.ok) {
-        const jsonData = await jsonResponse.json();
+        const jsonData: [RedditJsonData, RedditCommentsData] = await jsonResponse.json();
         const post = jsonData[0]?.data?.children?.[0]?.data;
         
         if (post) {
@@ -58,7 +87,7 @@ export async function scrapeRedditPost(url: string, includeComments: boolean = f
           return result;
         }
       }
-    } catch (jsonError) {
+    } catch {
       console.log("JSON API failed, falling back to HTML scraping");
     }
 
@@ -82,7 +111,7 @@ export async function scrapeRedditPost(url: string, includeComments: boolean = f
     const pageTitle = $('title').text() || '';
     
     // Clean up title
-    let title = ogTitle || pageTitle.replace(/\s*:\s*r\/\w+/, '').replace(/\s*-\s*Reddit/, '').trim();
+    const title = ogTitle || pageTitle.replace(/\s*:\s*r\/\w+/, '').replace(/\s*-\s*Reddit/, '').trim();
     
     // Extract subreddit from URL
     const subredditMatch = url.match(/\/r\/([^\/]+)/);
@@ -107,13 +136,14 @@ export async function scrapeRedditPost(url: string, includeComments: boolean = f
 
     return result;
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Reddit scraping error:", error);
-    throw new Error(error.message || "An unknown error occurred during scraping.");
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage || "An unknown error occurred during scraping.");
   }
 }
 
-function parseCommentsFromJson(comments: any[], depth: number = 0): RedditComment[] {
+function parseCommentsFromJson(comments: Array<{ data?: any }>, depth: number = 0): RedditComment[] {
   const parsedComments: RedditComment[] = [];
 
   for (const comment of comments) {

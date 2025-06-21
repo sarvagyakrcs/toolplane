@@ -4,12 +4,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getPostsByCategory, getAllCategories, formatDate } from '@/lib/blog';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { 
+  BookOpen,
+  ArrowLeft,
+  Calendar,
+  Clock,
+  User
+} from 'lucide-react';
 
 interface CategoryPageProps {
-  params: {
-    category: string;
-  };
+  params: Promise<{ category: string }>;
 }
 
 export async function generateStaticParams() {
@@ -20,29 +25,38 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const categorySlug = params.category;
-  const categoryName = categorySlug
+  const { category } = await params;
+  const categoryName = category
     .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
+
+  const posts = getPostsByCategory(categoryName);
+
+  if (posts.length === 0) {
+    return {
+      title: `${categoryName} - Category Not Found | The Toolplane Journal`,
+      description: `The category "${categoryName}" was not found.`,
+    };
+  }
 
   return {
     title: `${categoryName} Articles | The Toolplane Journal`,
-    description: `Read the latest ${categoryName.toLowerCase()} articles from The Toolplane Journal. Expert insights on developer tools, web scraping, and automation.`,
+    description: `Browse all ${posts.length} articles in the ${categoryName} category. Expert insights on web scraping, APIs, and developer tools.`,
     openGraph: {
       title: `${categoryName} Articles | The Toolplane Journal`,
       description: `Read the latest ${categoryName.toLowerCase()} articles from The Toolplane Journal.`,
       type: 'website',
-      url: `https://toolplane.xyz/blog/category/${categorySlug}`,
+      url: `https://toolplane.xyz/blog/category/${category}`,
     },
   };
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const categorySlug = params.category;
-  const categoryName = categorySlug
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category } = await params;
+  const categoryName = category
     .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
   const posts = getPostsByCategory(categoryName);

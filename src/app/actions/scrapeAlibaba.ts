@@ -182,8 +182,9 @@ export async function scrapeAlibabaProduct(url: string): Promise<AlibabaProductD
       features: features.slice(0, 5), // Limit to 5 features
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Alibaba scraping error:", error);
-    throw new Error(error.message || "An unknown error occurred during Alibaba scraping.");
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(errorMessage || "An unknown error occurred during Alibaba scraping.");
   }
 } 

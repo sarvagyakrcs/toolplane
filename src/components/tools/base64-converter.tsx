@@ -31,8 +31,9 @@ export function Base64Converter() {
     try {
       const result = await encodeBase64(encodeText);
       setEncodeResult(result.result);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -50,8 +51,9 @@ export function Base64Converter() {
     try {
       const result = await decodeBase64(decodeText);
       setDecodeResult(result.result);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
