@@ -40,20 +40,13 @@ export const metadata: Metadata = {
     description: "Generate high-quality QR codes for any URL or text. Customize colors and size. Free tool with instant download and API access.",
     type: "website",
     url: "https://toolplane.xyz/qr-generator",
-    images: [
-      {
-        url: "/og-qr-generator.png",
-        width: 1200,
-        height: 630,
-        alt: "QR Code Generator Tool",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "QR Code Generator - Create Custom QR Codes Instantly",
     description: "Free QR code generator. Create custom QR codes for URLs, text, and data. Instant download with customization options.",
-    images: ["/twitter-qr-generator.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/qr-generator",

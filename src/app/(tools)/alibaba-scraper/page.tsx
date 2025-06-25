@@ -25,20 +25,13 @@ export const metadata: Metadata = {
     description: "Extract Alibaba product information, pricing, and supplier details. Professional B2B scraper tool for wholesale research. Coming soon.",
     type: "website",
     url: "https://toolplane.xyz/alibaba-scraper",
-    images: [
-      {
-        url: "/og-alibaba-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "Alibaba Product Scraper Tool",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Alibaba Product Scraper - B2B Data Extraction Tool",
     description: "Extract Alibaba product data for wholesale research and supplier analysis. Professional B2B scraper coming soon.",
-    images: ["/twitter-alibaba-scraper.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/alibaba-scraper",

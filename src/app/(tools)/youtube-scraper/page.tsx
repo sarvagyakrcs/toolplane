@@ -39,20 +39,13 @@ export const metadata: Metadata = {
     description: "Extract YouTube video statistics including views, likes, duration, and channel info. Free tool with API access for video content analysis.",
     type: "website",
     url: "https://toolplane.xyz/youtube-scraper",
-    images: [
-      {
-        url: "/og-youtube-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "YouTube Video Scraper Tool",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "YouTube Video Scraper - Extract Video Statistics",
     description: "Free YouTube scraper. Extract video views, likes, duration, and channel data. Perfect for content analysis.",
-    images: ["/twitter-youtube-scraper.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/youtube-scraper",

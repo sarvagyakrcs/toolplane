@@ -40,20 +40,13 @@ export const metadata: Metadata = {
     description: "Free Amazon scraper with API access. Extract product prices, titles, images, ratings instantly. Best free alternative to Amazon API for dropshipping and price monitoring.",
     type: "website",
     url: "https://toolplane.xyz/amazon-scraper",
-    images: [
-      {
-        url: "/og-amazon-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "Free Amazon Product Scraper with API Access",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Free Amazon Product Scraper + API | Price Tracker & Product Data Extractor",
     description: "Free Amazon scraper with API access. Extract prices, titles, images, and ratings instantly. Perfect for dropshipping and product research.",
-    images: ["/twitter-amazon-scraper.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/amazon-scraper",

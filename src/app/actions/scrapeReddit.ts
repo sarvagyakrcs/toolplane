@@ -55,14 +55,24 @@ export async function scrapeRedditPost(url: string, includeComments: boolean = f
   }
 
   try {
+    // Extract basic info from URL as fallback
+    const urlParts = url.match(/\/r\/([^\/]+)\/comments\/([^\/]+)\/([^\/]*)/);
+    const subredditFromUrl = urlParts ? urlParts[1] : "Unknown";
+    const postIdFromUrl = urlParts ? urlParts[2] : null;
+    
     // Try Reddit's JSON API first (most reliable)
     const jsonUrl = url.endsWith('/') ? url + '.json' : url + '.json';
     
     try {
       const jsonResponse = await fetch(jsonUrl, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; WebScraper/1.0)',
-        }
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+        },
+        next: { revalidate: 0 } // Disable caching for server actions
       });
       
       if (jsonResponse.ok) {
@@ -75,7 +85,7 @@ export async function scrapeRedditPost(url: string, includeComments: boolean = f
             upvotes: post.ups ? post.ups.toString() : "N/A",
             comments: post.num_comments ? post.num_comments.toString() : "N/A",
             author: post.author || "Unknown",
-            subreddit: post.subreddit || "Unknown",
+            subreddit: post.subreddit || subredditFromUrl,
             postContent: post.selftext || null,
           };
 
@@ -86,60 +96,46 @@ export async function scrapeRedditPost(url: string, includeComments: boolean = f
 
           return result;
         }
+      } else if (jsonResponse.status === 403) {
+        console.log("Reddit API returned 403, likely rate limited or blocked");
       }
-    } catch {
-      console.log("JSON API failed, falling back to HTML scraping");
+    } catch (jsonError) {
+      console.log("JSON API failed:", jsonError instanceof Error ? jsonError.message : 'Unknown error');
     }
 
-    // Fallback to HTML scraping with meta tags
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch the page. Status: ${response.status}`);
+    // If we have URL parts, create a basic response without fetching
+    if (urlParts) {
+      console.log("Using URL-based fallback for Reddit post");
+      return {
+        title: urlParts[3] ? urlParts[3].replace(/[_-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : "Reddit Post",
+        upvotes: "N/A",
+        comments: "N/A", 
+        author: "Unknown",
+        subreddit: subredditFromUrl,
+        postContent: null,
+        commentsList: includeComments ? [] : undefined,
+      };
     }
 
-    const html = await response.text();
-    const $ = cheerio.load(html);
-
-    // Extract from meta tags (most reliable for HTML)
-    const ogTitle = $('meta[property="og:title"]').attr('content') || '';
-    const pageTitle = $('title').text() || '';
-    
-    // Clean up title
-    const title = ogTitle || pageTitle.replace(/\s*:\s*r\/\w+/, '').replace(/\s*-\s*Reddit/, '').trim();
-    
-    // Extract subreddit from URL
-    const subredditMatch = url.match(/\/r\/([^\/]+)/);
-    const subreddit = subredditMatch ? subredditMatch[1] : "Unknown";
-    
-    // Extract author from URL pattern or meta
-    const authorMatch = url.match(/\/comments\/[^\/]+\/[^\/]+\//) ? 
-                       ($('meta[name="author"]').attr('content') || "Unknown") : "Unknown";
-    
-    const result: RedditPostData = {
-      title: title || "Title not found",
-      upvotes: "N/A", // HTML scraping for upvotes is unreliable due to dynamic loading
-      comments: "N/A", // Same for comments
-      author: authorMatch,
-      subreddit,
-    };
-
-    // HTML comment scraping is limited due to Reddit's dynamic loading
-    if (includeComments) {
-      result.commentsList = []; // Empty array to indicate comments were requested but unavailable via HTML
-    }
-
-    return result;
+    // Last resort: return error-friendly response
+    throw new Error("Reddit post could not be accessed. This may be due to Reddit's anti-scraping measures, rate limiting, or the post being private/deleted.");
 
   } catch (error: unknown) {
     console.error("Reddit scraping error:", error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(errorMessage || "An unknown error occurred during scraping.");
+    
+    // Return a user-friendly error for specific cases
+    if (errorMessage.includes('403')) {
+      throw new Error("Reddit is currently blocking requests. Please try again later or use a different post.");
+    }
+    if (errorMessage.includes('404')) {
+      throw new Error("Reddit post not found. Please check the URL and try again.");
+    }
+    if (errorMessage.includes('rate limit')) {
+      throw new Error("Too many requests to Reddit. Please wait a moment before trying again.");
+    }
+    
+    throw new Error("Unable to fetch Reddit post data. This may be due to Reddit's restrictions or the post being unavailable.");
   }
 }
 

@@ -25,20 +25,13 @@ export const metadata: Metadata = {
     description: "Transform messy webpages into clean, readable content. Remove ads and clutter. Free tool with reading time calculation and auto tag extraction.",
     type: "website",
     url: "https://toolplane.xyz/article-cleaner",
-    images: [
-      {
-        url: "/og-article-cleaner.png",
-        width: 1200,
-        height: 630,
-        alt: "Article Cleaner Tool",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Article Cleaner - Extract Clean Content from Any Webpage",
     description: "Free article cleaner. Transform messy webpages into clean, readable content. Perfect for content creators and researchers.",
-    images: ["/twitter-article-cleaner.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/article-cleaner",

@@ -39,20 +39,13 @@ export const metadata: Metadata = {
     description: "Generate secure, strong passwords with custom criteria. Free tool with multiple options for enhanced security and protection.",
     type: "website",
     url: "https://toolplane.xyz/password-generator",
-    images: [
-      {
-        url: "/og-password-generator.png",
-        width: 1200,
-        height: 630,
-        alt: "Password Generator Tool",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Password Generator - Create Secure Strong Passwords",
     description: "Free password generator. Create secure, strong passwords with custom criteria. Enhance your security instantly.",
-    images: ["/twitter-password-generator.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/password-generator",

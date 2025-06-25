@@ -39,20 +39,13 @@ export const metadata: Metadata = {
     description: "Professional web scraper with free API access. Extract data from any website using CSS selectors. No coding required, unlimited use. Free alternative to expensive scraping services.",
     type: "website",
     url: "https://toolplane.xyz/scraper",
-    images: [
-      {
-        url: "/og-web-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "Free Web Scraper Tool with API Access",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Free Web Scraper Tool + API | Extract Data from Any Website",
     description: "Professional web scraping tool with free API access. Extract data from any website instantly using CSS selectors. No coding required.",
-    images: ["/twitter-web-scraper.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/scraper",

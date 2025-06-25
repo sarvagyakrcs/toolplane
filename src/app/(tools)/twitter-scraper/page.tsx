@@ -38,20 +38,13 @@ export const metadata: Metadata = {
     description: "Free Twitter/X scraper with API access. Extract tweets, profiles, followers, and analytics. Perfect for social media research and sentiment analysis. No Twitter API limits.",
     type: "website",
     url: "https://toolplane.xyz/twitter-scraper",
-    images: [
-      {
-        url: "/og-twitter-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "Free Twitter Scraper with API Access",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Free Twitter Scraper + API | Extract Tweets & Analytics | X Data Extractor",
     description: "Free Twitter/X scraper with API access. Extract tweets, profiles, followers, and engagement metrics. Perfect for social media research.",
-    images: ["/twitter-twitter-scraper.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/twitter-scraper",

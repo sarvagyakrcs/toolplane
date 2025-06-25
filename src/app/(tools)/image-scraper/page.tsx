@@ -39,20 +39,13 @@ export const metadata: Metadata = {
     description: "Extract all images from any website with metadata and smart filtering. Free tool with download capabilities for designers and content creators.",
     type: "website",
     url: "https://toolplane.xyz/image-scraper",
-    images: [
-      {
-        url: "/og-image-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "Image Scraper Tool",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Image Scraper - Extract Images from Any Website",
     description: "Free image scraper. Extract all images from websites with metadata and download capabilities. Perfect for designers.",
-    images: ["/twitter-image-scraper.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/image-scraper",

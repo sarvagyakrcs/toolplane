@@ -38,20 +38,13 @@ export const metadata: Metadata = {
     description: "Free Brave Search scraper with API access. Extract search results, rankings, and SEO data from Brave's privacy-focused search engine. Perfect for SEO research and competitor analysis.",
     type: "website",
     url: "https://toolplane.xyz/brave-scraper",
-    images: [
-      {
-        url: "/og-brave-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "Free Brave Search Scraper with API Access",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Free Brave Search Scraper + API | Extract Search Results & SEO Data",
     description: "Free Brave Search scraper with API access. Extract search results, rankings, and SEO data from privacy-focused search engine. Perfect for SEO research.",
-    images: ["/twitter-brave-scraper.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/brave-scraper",

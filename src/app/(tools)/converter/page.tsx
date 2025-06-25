@@ -40,20 +40,13 @@ export const metadata: Metadata = {
     description: "Convert any webpage to clean Markdown format instantly. Free tool perfect for developers, writers, and content creators.",
     type: "website",
     url: "https://toolplane.xyz/converter",
-    images: [
-      {
-        url: "/og-markdown-converter.png",
-        width: 1200,
-        height: 630,
-        alt: "Markdown Converter Tool",
-      }
-    ],
+
   },
   twitter: {
     card: "summary_large_image",
     title: "Markdown Converter - Convert Webpages to Markdown",
     description: "Free markdown converter. Convert any webpage to clean Markdown format. Perfect for documentation and content creation.",
-    images: ["/twitter-markdown-converter.png"],
+
   },
   alternates: {
     canonical: "https://toolplane.xyz/converter",
