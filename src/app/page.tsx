@@ -26,7 +26,12 @@ import {
   Menu,
   X,
   Coffee,
-  Heart
+  Heart,
+  TrendingUp,
+  Users,
+  Timer,
+  Shield,
+  Rocket
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { offside } from "@/lib/fonts";
@@ -41,6 +46,7 @@ interface Tool {
   tags?: string[];
   isNew?: boolean;
   hasFreeApi?: boolean;
+  isPopular?: boolean;
 }
 
 const tools: Tool[] = [
@@ -52,7 +58,8 @@ const tools: Tool[] = [
     icon: <Globe className="h-5 w-5" />,
     category: "Scrapers",
     tags: ["CSS", "Data"],
-    hasFreeApi: true
+    hasFreeApi: true,
+    isPopular: true
   },
   {
     title: "Amazon Price Scraper",
@@ -61,7 +68,8 @@ const tools: Tool[] = [
     icon: <ShoppingCart className="h-5 w-5" />,
     category: "Scrapers",
     tags: ["E-commerce", "Price"],
-    hasFreeApi: true
+    hasFreeApi: true,
+    isPopular: true
   },
   {
     title: "Reddit Post Scraper",
@@ -158,6 +166,16 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [recentlyUsed, setRecentlyUsed] = useState<Tool[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [liveUsers, setLiveUsers] = useState(847);
+  const [quickUrl, setQuickUrl] = useState("");
+
+  // Simulate live user count
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveUsers(prev => prev + Math.floor(Math.random() * 3) - 1);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Load recently used tools from localStorage
   useEffect(() => {
@@ -183,6 +201,15 @@ export default function Home() {
     const recent = JSON.parse(localStorage.getItem("recentlyUsedTools") || "[]");
     const updated = [tool.href, ...recent.filter((id: string) => id !== tool.href)].slice(0, 4);
     localStorage.setItem("recentlyUsedTools", JSON.stringify(updated));
+  };
+
+  const handleQuickScrape = () => {
+    if (quickUrl.trim()) {
+      // Add to recently used
+      handleToolClick(tools[0]); // Web scraper tool
+      // Redirect to scraper with URL parameter
+      window.location.href = `/scraper?url=${encodeURIComponent(quickUrl.trim())}`;
+    }
   };
 
   return (
@@ -229,56 +256,175 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <div className="grainy mb-10">
-      <section className="container mx-auto px-4 py-16 md:py-24 text-center">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-            Your Swiss Army Knife
-            <br />
-            <span className="text-primary">for the Web</span>
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Lightning-fast tools and powerful APIs built with precision. 
-            Extract data, convert content, and generate utilities — all in one place.
-          </p>
-          
-          {/* Trust Indicators */}
-          <div className="flex flex-wrap justify-center items-center gap-6 mb-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <span>Trusted by developers</span>
+      <div className="relative bg-gradient-to-br from-blue-50/50 via-slate-50/50 to-gray-50/50 dark:from-blue-950/20 dark:via-slate-950/20 dark:to-gray-950/20 border-b">
+        <section className="container mx-auto px-4 py-16 md:py-20 text-center">
+          <div className="max-w-3xl mx-auto">
+            {/* Live indicator */}
+            <div className="inline-flex items-center gap-2 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-blue-700 dark:text-blue-300 px-3 py-1.5 rounded-full text-sm font-medium mb-6 border border-blue-200/50 dark:border-blue-800/50 shadow-sm">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <span>{liveUsers.toLocaleString()} developers using today</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-green-500" />
-              <span>99.9% uptime</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-xs bg-muted px-2 py-1 rounded">{tools.length}</span>
-              <span>tools available</span>
-            </div>
-          </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-lg px-8" asChild>
-              <Link href="#tools">
-                Browse Tools
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8" asChild>
-              <Link href="#api">
-                View API Docs
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 leading-tight">
+              I built this because I was tired of{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-slate-700 bg-clip-text text-transparent">
+                building scrapers
+              </span>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+              After countless nights debugging XPath selectors and fighting anti-bot measures, 
+              I built the tools I wish existed. 
+              <span className="font-semibold text-gray-900 dark:text-gray-100">Now you can extract data from any website without the headache.</span>
+            </p>
+
+            {/* Enhanced CTA */}
+            <div className="max-w-md mx-auto mb-6">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-slate-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300" />
+                <div className="relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg">
+                  <div className="flex gap-2">
+                    <Input
+                      type="url"
+                      placeholder="https://example.com"
+                      value={quickUrl}
+                      onChange={(e) => setQuickUrl(e.target.value)}
+                      className="flex-1 h-11 border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-blue-500"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && quickUrl.trim()) {
+                          handleQuickScrape();
+                        }
+                      }}
+                    />
+                    <Button 
+                      onClick={handleQuickScrape}
+                      disabled={!quickUrl.trim()}
+                      className="h-11 px-4 bg-gradient-to-r from-blue-600 to-slate-700 hover:from-blue-700 hover:to-slate-800 text-white border-0 shadow-sm"
+                    >
+                      <Globe className="h-4 w-4 mr-1.5" />
+                      Scrape
+                    </Button>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                    No signup required • Results in seconds
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Simple secondary action */}
+            <div className="flex items-center justify-center gap-6 mb-6">
+              <Button variant="ghost" className="text-gray-600 dark:text-gray-400 hover:text-blue-600" asChild>
+                <Link href="#tools">
+                  Browse all tools →
+                </Link>
+              </Button>
+              <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <span>by developers</span>
+              </div>
+            </div>
+            
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Built by a developer, for developers. Always free.
+            </p>
           </div>
+        </section>
+      </div>
+
+      {/* Smart Recommendations */}
+      <section className="container mx-auto px-4 py-8">
+        <div className="text-center mb-6">
+          <h2 className="text-lg font-semibold mb-2">Popular right now</h2>
+          <p className="text-sm text-muted-foreground">
+            Tools our community uses most often
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <Link href="/amazon-scraper" className="group">
+            <Card className="h-full transition-all duration-200 hover:shadow-md hover:-translate-y-1 border-orange-100 dark:border-orange-900/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                    <ShoppingCart className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-sm group-hover:text-orange-600 transition-colors">
+                      Amazon Scraper
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Get prices, titles, reviews
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 px-2 py-1 rounded">
+                    🔥 Hot
+                  </span>
+                  <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-orange-600 transition-colors" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/reddit-scraper" className="group">
+            <Card className="h-full transition-all duration-200 hover:shadow-md hover:-translate-y-1 border-red-100 dark:border-red-900/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
+                    <MessageSquare className="h-4 w-4 text-red-600 dark:text-red-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-sm group-hover:text-red-600 transition-colors">
+                      Reddit Scraper
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Posts, comments, votes
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-2 py-1 rounded">
+                    📈 Trending
+                  </span>
+                  <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-red-600 transition-colors" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/youtube-scraper" className="group">
+            <Card className="h-full transition-all duration-200 hover:shadow-md hover:-translate-y-1 border-red-100 dark:border-red-900/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
+                    <Youtube className="h-4 w-4 text-red-600 dark:text-red-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-sm group-hover:text-red-600 transition-colors">
+                      YouTube Stats
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Views, likes, channel info
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-2 py-1 rounded">
+                    ⭐ Popular
+                  </span>
+                  <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-red-600 transition-colors" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       </section>
-      </div>
 
       {/* Recently Used Tools */}
       {recentlyUsed.length > 0 && (
@@ -314,100 +460,128 @@ export default function Home() {
         </section>
       )}
 
-      {/* Tools Section */}
-      <section id="tools" className="container mx-auto px-4 pb-16">
-        {/* Search and Filter */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <div className="relative mb-6">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search tools... (try 'scraper', 'convert', 'generate')"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-3 text-lg border-2 focus:border-primary"
-            />
+              {/* Tools Section */}
+        <section id="tools" className="container mx-auto px-4 pb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">
+              Available Tools
+            </h2>
+            <p className="text-muted-foreground">
+              Pick what you need, use it instantly.
+            </p>
           </div>
-          
-          {/* Category Filters */}
-          <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedCategory(category)}
-                className="transition-all"
+
+          <div className="max-w-xl mx-auto mb-8">
+            <div className="relative mb-4">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search tools..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-4 py-2"
+              />
+            </div>
+            
+            {/* Category Filters */}
+            <div className="flex flex-wrap justify-center gap-2">
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className="transition-all hover:scale-105"
+                >
+                  {category}
+                  {category !== "All" && (
+                    <Badge variant="secondary" className="ml-2 text-xs">
+                      {tools.filter(t => t.category === category).length}
+                    </Badge>
+                  )}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+                  {/* Tools Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredTools.map((tool) => (
+              <Link 
+                key={tool.href} 
+                href={tool.href}
+                onClick={() => handleToolClick(tool)}
+                className="group"
               >
-                {category}
-                {category !== "All" && (
-                  <Badge variant="secondary" className="ml-2 text-xs">
-                    {tools.filter(t => t.category === category).length}
-                  </Badge>
-                )}
-              </Button>
+                <Card className={cn(
+                  "h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2",
+                  tool.isPopular 
+                    ? "border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50/50 to-slate-50/50 dark:from-blue-950/20 dark:to-slate-950/20" 
+                    : "hover:border-primary/50"
+                )}>
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className={cn(
+                        "p-2 rounded-lg",
+                        tool.isPopular ? "bg-blue-100 dark:bg-blue-900/50" : "bg-muted"
+                      )}>
+                        <div className="text-primary">{tool.icon}</div>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        {tool.isPopular && (
+                          <Badge className="text-xs bg-gradient-to-r from-blue-600 to-slate-700 hover:from-blue-700 hover:to-slate-800 text-white border-0">
+                            🔥 Popular
+                          </Badge>
+                        )}
+                        {tool.isNew && (
+                          <Badge className="text-xs bg-green-500 text-white hover:bg-green-500">
+                            ✨ New
+                          </Badge>
+                        )}
+                        {tool.hasFreeApi && (
+                          <Badge variant="outline" className="text-xs border-emerald-200 text-emerald-700 dark:border-emerald-800 dark:text-emerald-400">
+                            Free API
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                      {tool.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                      {tool.description}
+                    </p>
+                    
+                    {tool.tags && (
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {tool.tags.slice(0, 2).map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                    
+                    <Button 
+                      size="sm" 
+                      className={cn(
+                        "w-full transition-all duration-300 group-hover:scale-105",
+                        tool.isPopular
+                          ? "bg-gradient-to-r from-blue-600 to-slate-700 hover:from-blue-700 hover:to-slate-800 text-white border-0"
+                          : "group-hover:bg-primary group-hover:text-primary-foreground"
+                      )}
+                      variant={tool.isPopular ? "default" : "outline"}
+                    >
+                      {tool.isPopular ? "Start Extracting" : "Try Free"}
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
-        </div>
-
-        {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredTools.map((tool) => (
-            <Link 
-              key={tool.href} 
-              href={tool.href}
-              onClick={() => handleToolClick(tool)}
-              className="group"
-            >
-              <Card className="h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-primary/50">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="text-primary">{tool.icon}</div>
-                    <div className="flex gap-1">
-                      {tool.isNew && (
-                        <Badge className="text-xs bg-green-100 text-green-800 hover:bg-green-100">
-                          New
-                        </Badge>
-                      )}
-                      {tool.hasFreeApi && (
-                        <Badge variant="outline" className="text-xs">
-                          Free API
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                  <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                    {tool.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                    {tool.description}
-                  </p>
-                  
-                  {tool.tags && (
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {tool.tags.slice(0, 2).map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                  
-                  <Button 
-                    size="sm" 
-                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all"
-                    variant="outline"
-                  >
-                    Try Now
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
 
         {filteredTools.length === 0 && (
           <div className="text-center py-12">
@@ -419,6 +593,8 @@ export default function Home() {
           </div>
         )}
       </section>
+
+
 
       {/* Support Section */}
       <section className="bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 dark:from-yellow-950/20 dark:via-orange-950/20 dark:to-yellow-950/20 border-y">
