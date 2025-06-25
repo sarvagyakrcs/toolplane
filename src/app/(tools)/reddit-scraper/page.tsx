@@ -40,20 +40,11 @@ export const metadata: Metadata = {
     description: "Extract Reddit post data including upvotes, comments, and metadata. Free tool with API access for social media research and analysis.",
     type: "website",
     url: "https://toolplane.xyz/reddit-scraper",
-    images: [
-      {
-        url: "/og-reddit-scraper.png",
-        width: 1200,
-        height: 630,
-        alt: "Reddit Post Scraper Tool",
-      }
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Reddit Post Scraper - Extract Reddit Data Instantly",
     description: "Free Reddit scraper. Extract posts, comments, upvotes, and metadata. Perfect for social media analysis.",
-    images: ["/twitter-reddit-scraper.png"],
   },
   alternates: {
     canonical: "https://toolplane.xyz/reddit-scraper",
